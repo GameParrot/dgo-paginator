@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/topi314/dgo-paginator"
 	"github.com/bwmarrin/discordgo"
+	paginator "github.com/topi314/dgo-paginator"
 )
 
 var (
@@ -39,9 +39,8 @@ func main() {
 			PageFunc: func(page int, embed *discordgo.MessageEmbed) {
 				embed.Description = pages[page]
 			},
-			MaxPages:        len(pages),
-			Expiry:          time.Now(),
-			ExpiryLastUsage: true,
+			MaxPages: len(pages),
+			LifeTime: 86400 * time.Second,
 		}); err != nil {
 			fmt.Println(err)
 		}

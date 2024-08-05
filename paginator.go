@@ -42,7 +42,7 @@ func (m *Manager) cleanup() {
 	defer m.mu.Unlock()
 	now := time.Now()
 	for _, p := range m.paginators {
-		if !p.Expiry.IsZero() && p.Expiry.After(now) {
+		if !p.Expiry.IsZero() && p.Expiry.Before(now) {
 			// TODO: remove components?
 			delete(m.paginators, p.ID)
 		}
@@ -50,20 +50,20 @@ func (m *Manager) cleanup() {
 }
 
 type Paginator struct {
-	PageFunc        func(page int, embed *discordgo.MessageEmbed)
-	MaxPages        int
-	CurrentPage     int
-	Creator         string
-	Expiry          time.Time
-	ExpiryLastUsage bool
-	ID              string
+	PageFunc    func(page int, embed *discordgo.MessageEmbed)
+	MaxPages    int
+	CurrentPage int
+	Creator     string
+	Expiry      time.Time
+	LifeTime    time.Duration
+	ID          string
 }
 
 func (m *Manager) CreateMessage(s *discordgo.Session, channelID string, paginator *Paginator) error {
 	if paginator.ID == "" {
 		paginator.ID = fmt.Sprintf("%s-%d", channelID, time.Now().UnixNano())
 	}
-
+	paginator.Expiry = time.Now().Add(paginator.LifeTime)
 	m.add(paginator)
 
 	_, err := s.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
@@ -155,7 +155,7 @@ func (m *Manager) OnInteractionCreate(s *discordgo.Session, interaction *discord
 		paginator.CurrentPage = paginator.MaxPages - 1
 	}
 
-	paginator.Expiry = time.Now()
+	paginator.Expiry = time.Now().Add(paginator.LifeTime)
 
 	if err := s.InteractionRespond(interaction.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseUpdateMessage,
