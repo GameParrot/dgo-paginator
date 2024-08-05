@@ -29,7 +29,7 @@ type Manager struct {
 
 func (m *Manager) startCleanup() {
 	go func() {
-		ticker := time.NewTimer(30 * time.Second)
+		ticker := time.NewTicker(30 * time.Second)
 		defer ticker.Stop()
 		for range ticker.C {
 			m.cleanup()
