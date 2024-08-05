@@ -201,7 +201,7 @@ func (m *Manager) createComponents(paginator *Paginator) discordgo.MessageCompon
 			Label:    cfg.First.Label,
 			Style:    cfg.First.Style,
 			Disabled: paginator.CurrentPage == 0,
-			Emoji:    cfg.First.Emoji,
+			Emoji:    &cfg.First.Emoji,
 			CustomID: m.formatCustomID(paginator, "first"),
 		})
 	}
@@ -210,7 +210,7 @@ func (m *Manager) createComponents(paginator *Paginator) discordgo.MessageCompon
 			Label:    cfg.Back.Label,
 			Style:    cfg.Back.Style,
 			Disabled: paginator.CurrentPage == 0,
-			Emoji:    cfg.Back.Emoji,
+			Emoji:    &cfg.Back.Emoji,
 			CustomID: m.formatCustomID(paginator, "back"),
 		})
 	}
@@ -219,7 +219,7 @@ func (m *Manager) createComponents(paginator *Paginator) discordgo.MessageCompon
 		actionRow.Components = append(actionRow.Components, discordgo.Button{
 			Label:    cfg.Stop.Label,
 			Style:    cfg.Stop.Style,
-			Emoji:    cfg.Stop.Emoji,
+			Emoji:    &cfg.Stop.Emoji,
 			CustomID: m.formatCustomID(paginator, "stop"),
 		})
 	}
@@ -229,7 +229,7 @@ func (m *Manager) createComponents(paginator *Paginator) discordgo.MessageCompon
 			Label:    cfg.Next.Label,
 			Style:    cfg.Next.Style,
 			Disabled: paginator.CurrentPage == paginator.MaxPages-1,
-			Emoji:    cfg.Next.Emoji,
+			Emoji:    &cfg.Next.Emoji,
 			CustomID: m.formatCustomID(paginator, "next"),
 		})
 	}
@@ -238,7 +238,7 @@ func (m *Manager) createComponents(paginator *Paginator) discordgo.MessageCompon
 			Label:    cfg.Last.Label,
 			Style:    cfg.Last.Style,
 			Disabled: paginator.CurrentPage == paginator.MaxPages-1,
-			Emoji:    cfg.Last.Emoji,
+			Emoji:    &cfg.Last.Emoji,
 			CustomID: m.formatCustomID(paginator, "last"),
 		})
 	}
